@@ -30,13 +30,9 @@ class petSim
             return userInput;
         }
 
-        float hunger = 5;
-        float happiness = 5;
-        float health = 5;
-
         // Program Requirement 1 - Pet Creation
         string[] petTypes = ["Dog", "Cat", "Rabbit"];
-        int userInput = -1;
+        
         int numPetTypes = petTypes.Length;
         Console.WriteLine("Choose your type of pet: \n 1 - Dog \n 2 - Cat\n 3 - Rabbit");
         int userPetType = getIntInput(numPetTypes);
@@ -44,6 +40,47 @@ class petSim
         string userPetName = Console.ReadLine();
         Console.WriteLine("Welcome {0}!", userPetName);
 
+        // Program Requirement 2 - Pet Care Actions
+
+        double[] petStatus = [5.0, 5.0, 5.0]; // [0] = Hunger, [1] = Happiness, [2] = Health
+
+        // Main loop
+
+        int currInput = -1;
+        int numOptions = 5;
+        while (currInput != 5)
+        {
+            Console.WriteLine("What would you like to do with {0}?\n 1 - Feed {0}\n 2 - Play with {0}\n 3 - Let {0} rest\n" +
+                " 4 - Check {0}'s status \n 5 - Exit", userPetName);
+            currInput = getIntInput(numOptions);
+            switch (currInput)
+            {
+                case 1:
+                    //Feed the pet
+                    //petStatus = feedPet(petStatus);
+                    break;
+                case 2:
+                    // Play with the pet
+                    //petStatus = playPet(petStatus);
+                    break;
+                case 3:
+                    // Let the pet rest
+                    //petStatus = restPet(petStatus);
+                    break;
+                case 4:
+                    // Display pet's status
+                    //displayStatus(petStatus);
+                    break;
+                case 5:
+                    //Exit
+                    break;
+                default:
+                    Console.WriteLine("Unexpected Behaviour"); // Should never reach here with input validation done
+                    break;
+            }
+        }
+
+        
 
     }
 }
