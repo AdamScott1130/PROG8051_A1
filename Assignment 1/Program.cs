@@ -33,9 +33,9 @@ class petSim
     }
 
     // 2.2 - Modify pet stats and display a message describing each action's effect
-    static double[] feedPet(double[] status, string name)
+    static int[] feedPet(int[] status, string name)
     {
-        double[] result = [-1, -1, -1];
+        int[] result = [-1, -1, -1];
         if ((status[0] - 1) < 0)
         {
             result[0] = 0;
@@ -58,9 +58,9 @@ class petSim
         Console.WriteLine("You fed {0}, who is now happier and less hungry!", name);
         return result;
     }
-    static double[] playPet(double[] status, string name)
+    static int[] playPet(int[] status, string name)
     {
-        double[] result = [-1, -1, -1];
+        int[] result = [-1, -1, -1];
         if ((status[0] + 1) > 10)
         {
             result[0] = 10;
@@ -82,9 +82,9 @@ class petSim
         Console.WriteLine("You played with {0}, who is now happier, but also a bit hungrier.", name);
         return result;
     }
-    static double[] restPet(double[] status, string name)
+    static int[] restPet(int[] status, string name)
     {
-        double[] result = [-1, -1, -1];
+        int[] result = [-1, -1, -1];
         result[0] = status[0];
         if ((status[1] - 1) < 0)
         {
@@ -103,36 +103,46 @@ class petSim
         {
             result[2] = status[2] + 1;
         }
-        Console.WriteLine("You played with {0}, who is now healthier, but also a bit less happy.", name);
+        Console.WriteLine("{0} rested, and is now healthier, but also a bit less happy.", name);
         return result;
     }
     // 3.1 - Display pet's stats
-    static void displayStatus(double[] status, string name)
+    static void displayStatus(int[] status, string name)
     {
         Console.WriteLine(" Hunger: {0}\n Happiness: {1}\n Health: {2}", status[0], status[1], status[2]);
     }
 
     // 3.2 - Status check that warns user if any stat is critical
-    static void displayWarnings(double[] status, int type, string name)
+    static void displayWarnings(int[] status, int type, string name)
     {
         // High hunger
         if (status[0] > 7)
         {
             Console.WriteLine("Your {0} is hungry, try feeding {1}!", petTypes[type], name);
         }
+        // Low happiness
         if (status[1] < 3)
         {
             Console.WriteLine("Your {0} is unhappy, try playing with {1}!", petTypes[type], name);
         }
+        // Low health
         if (status[2] < 3)
         {
             Console.WriteLine("Your {0} is unhealthy, try letting {1} rest!", petTypes[type], name);
         }
         return;
     }
+    // 4.1 - Implement time-based changes
+    static int passTime(int time, int hours = 1)
+    {
+        return time + hours;
+    }
+    static void displayTime(int time)
+    {
+        Console.WriteLine("Day {0} -- Time {1:D2}:00", (time / 24) + 1, time % 24);
+    }
     static void Main()
     {
-        
         // Program Requirement 1.1 - Choose a pet type and give it a name
         string[] petTypes = ["Dog", "Cat", "Rabbit"];
 
@@ -146,17 +156,19 @@ class petSim
         Console.WriteLine("Welcome, {0} the {1}!", userPetName, petTypes[userPetType]);
 
         // 3.1 - Track pet's stats on a scale from 1 to 10
-        double[] petStatus = [5.0, 5.0, 5.0]; // [0] = Hunger, [1] = Happiness, [2] = Health
+        int[] petStatus = [5, 5, 5]; // [0] = Hunger, [1] = Happiness, [2] = Health
 
         // 2.1 - Pet Care Actions
 
         int currInput = -1;
         int numOptions = 5;
+        int time = 0;
         while (currInput != 5)
         {
-            // Program Requirement 3.2 - Status check and display warnings
+            displayTime(time);
+            // 3.2 - Status check and display warnings
             displayWarnings(petStatus, userPetType, userPetName);
-
+            // 6.1 / 6.2 - Give user instruction on how to interact with console interface
             Console.WriteLine("What would you like to do with {0}?\n 1 - Feed {0}\n 2 - Play with {0}\n 3 - Let {0} rest\n" +
                 " 4 - Check {0}'s status \n 5 - Exit", userPetName);
             currInput = getIntInput(numOptions);
@@ -165,15 +177,45 @@ class petSim
                 case 1:
                     // 2.1.1 - Feed the pet
                     petStatus = feedPet(petStatus, userPetName);
-                    //Console.WriteLine("You fed {0}")
+                    //Console.WriteLine("You fed {0}!")
                     break;
                 case 2:
-                    // 2.1.2 - Play with the pet
-                    petStatus = playPet(petStatus, userPetName);
+                    // 5.1 / 5.2 - Special event - refuse to play if too hungry
+                    if (petStatus[0] == 10)
+                    {
+                        Console.WriteLine("{0} is too hunrgy to play, and instead knocked over your garbage can to find food!", userPetName);
+                        Console.WriteLine("{0}'s hunger went down, but {0} also got sick, significantly impacting health.", userPetName);
+                        petStatus[0] -= 2;
+                        petStatus[2] -= 3;
+                        if(petStatus[2] > 10)
+                        {
+                            petStatus[2] = 10;
+                        }
+                    }
+                    else
+                    {
+                        // 2.1.2 - Play with the pet
+                        petStatus = playPet(petStatus, userPetName);
+                    }
                     break;
                 case 3:
-                    // 2.1.3 - Let the pet rest
-                    petStatus = restPet(petStatus, userPetName);
+                    // 5.1 / 5.2 - Special event - refuse to rest if too unhappy
+                    if (petStatus[0] == 10)
+                    {
+                        Console.WriteLine("{0} ran away because of low happiness!", userPetName);
+                        Console.WriteLine("{0} came back from their adventure happier, but also got in a fight with a stray, significantly impacting health.", userPetName);
+                        petStatus[1] += 2;
+                        petStatus[2] -= 3;
+                        if(petStatus[2] > 10)
+                        {
+                            petStatus[2] = 10;
+                        }
+                    }
+                    else
+                    {
+                        // 2.1.3 - Let the pet rest
+                        petStatus = restPet(petStatus, userPetName);
+                    }
                     break;
                 case 4:
                     // Display pet's status
@@ -186,6 +228,7 @@ class petSim
                     Console.WriteLine("Unexpected Behaviour"); // Should never reach here with input validation done
                     break;
             }
+            time = passTime(time);
         }
     }
 }
