@@ -1,11 +1,10 @@
 ﻿// This program implemenets a virtual pet simulator
 class petSim
 {
-    // Global variable initialization
     static string[] petTypes = ["Dog", "Cat", "Rabbit"];
     static int numPetTypes = petTypes.Length;
     // Validates user input is an integer and returns that integer
-    static int getIntInput(int numOptions)
+    static int GetIntInput(int numOptions)
     {
         bool validInput = false;
         int userInput = -1;
@@ -33,7 +32,7 @@ class petSim
     }
 
     // 2.2 - Modify pet stats and display a message describing each action's effect
-    static int[] feedPet(int[] status, string name)
+    static int[] FeedPet(int[] status, string name)
     {
         int[] result = [-1, -1, -1];
         if ((status[0] - 1) < 0)
@@ -58,7 +57,7 @@ class petSim
         Console.WriteLine("You fed {0}, who is now happier and less hungry!", name);
         return result;
     }
-    static int[] playPet(int[] status, string name)
+    static int[] PlayPet(int[] status, string name)
     {
         int[] result = [-1, -1, -1];
         if ((status[0] + 1) > 10)
@@ -82,7 +81,7 @@ class petSim
         Console.WriteLine("You played with {0}, who is now happier, but also a bit hungrier.", name);
         return result;
     }
-    static int[] restPet(int[] status, string name)
+    static int[] RestPet(int[] status, string name)
     {
         int[] result = [-1, -1, -1];
         result[0] = status[0];
@@ -107,13 +106,13 @@ class petSim
         return result;
     }
     // 3.1 - Display pet's stats
-    static void displayStatus(int[] status, string name)
+    static void DisplayStatus(int[] status, string name)
     {
         Console.WriteLine(" Hunger: {0}\n Happiness: {1}\n Health: {2}", status[0], status[1], status[2]);
     }
 
     // 3.2 - Status check that warns user if any stat is critical
-    static void displayWarnings(int[] status, int type, string name)
+    static void DisplayWarnings(int[] status, int type, string name)
     {
         // High hunger
         if (status[0] > 7)
@@ -133,11 +132,11 @@ class petSim
         return;
     }
     // 4.1 - Implement time-based changes
-    static int passTime(int time, int hours = 1)
+    static int PassTime(int time, int hours = 1)
     {
         return time + hours;
     }
-    static void displayTime(int time)
+    static void DisplayTime(int time)
     {
         Console.WriteLine("Day {0} -- Time {1:D2}:00", (time / 24) + 1, time % 24);
     }
@@ -148,7 +147,7 @@ class petSim
 
         int numPetTypes = petTypes.Length;
         Console.WriteLine("Choose your type of pet: \n 1 - Dog \n 2 - Cat\n 3 - Rabbit");
-        int userPetType = getIntInput(numPetTypes) - 1;
+        int userPetType = GetIntInput(numPetTypes) - 1;
         Console.WriteLine("You have chosen {0}! Please enter a name for your {0}:", petTypes[userPetType], petTypes[userPetType]);
         string userPetName = Console.ReadLine();
 
@@ -162,21 +161,21 @@ class petSim
 
         int currInput = -1;
         int numOptions = 5;
-        int time = 0;
+        int currTime = 0;
         while (currInput != 5)
         {
-            displayTime(time);
+            DisplayTime(currTime);
             // 3.2 - Status check and display warnings
-            displayWarnings(petStatus, userPetType, userPetName);
+            DisplayWarnings(petStatus, userPetType, userPetName);
             // 6.1 / 6.2 - Give user instruction on how to interact with console interface
             Console.WriteLine("What would you like to do with {0}?\n 1 - Feed {0}\n 2 - Play with {0}\n 3 - Let {0} rest\n" +
                 " 4 - Check {0}'s status \n 5 - Exit", userPetName);
-            currInput = getIntInput(numOptions);
+            currInput = GetIntInput(numOptions);
             switch (currInput)
             {
                 case 1:
                     // 2.1.1 - Feed the pet
-                    petStatus = feedPet(petStatus, userPetName);
+                    petStatus = FeedPet(petStatus, userPetName);
                     //Console.WriteLine("You fed {0}!")
                     break;
                 case 2:
@@ -187,7 +186,7 @@ class petSim
                         Console.WriteLine("{0}'s hunger went down, but {0} also got sick, significantly impacting health.", userPetName);
                         petStatus[0] -= 2;
                         petStatus[2] -= 3;
-                        if(petStatus[2] > 10)
+                        if (petStatus[2] > 10)
                         {
                             petStatus[2] = 10;
                         }
@@ -195,7 +194,7 @@ class petSim
                     else
                     {
                         // 2.1.2 - Play with the pet
-                        petStatus = playPet(petStatus, userPetName);
+                        petStatus = PlayPet(petStatus, userPetName);
                     }
                     break;
                 case 3:
@@ -206,7 +205,7 @@ class petSim
                         Console.WriteLine("{0} came back from their adventure happier, but also got in a fight with a stray, significantly impacting health.", userPetName);
                         petStatus[1] += 2;
                         petStatus[2] -= 3;
-                        if(petStatus[2] > 10)
+                        if (petStatus[2] > 10)
                         {
                             petStatus[2] = 10;
                         }
@@ -214,12 +213,12 @@ class petSim
                     else
                     {
                         // 2.1.3 - Let the pet rest
-                        petStatus = restPet(petStatus, userPetName);
+                        petStatus = RestPet(petStatus, userPetName);
                     }
                     break;
                 case 4:
                     // Display pet's status
-                    displayStatus(petStatus, userPetName);
+                    DisplayStatus(petStatus, userPetName);
                     break;
                 case 5:
                     //Exit
@@ -228,7 +227,7 @@ class petSim
                     Console.WriteLine("Unexpected Behaviour"); // Should never reach here with input validation done
                     break;
             }
-            time = passTime(time);
+            currTime = PassTime(currTime);
         }
     }
 }
