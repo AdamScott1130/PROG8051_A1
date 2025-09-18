@@ -35,9 +35,9 @@ class petSim
     static int[] FeedPet(int[] status, string name)
     {
         int[] result = [-1, -1, -1];
-        if ((status[0] - 1) < 0)
+        if ((status[0] - 1) < 1)
         {
-            result[0] = 0;
+            result[0] = 1;
         }
         else
         {
@@ -85,9 +85,9 @@ class petSim
     {
         int[] result = [-1, -1, -1];
         result[0] = status[0];
-        if ((status[1] - 1) < 0)
+        if ((status[1] - 1) < 1)
         {
-            result[1] = 0;
+            result[1] = 1;
         }
         else
         {
@@ -186,9 +186,9 @@ class petSim
                         Console.WriteLine("{0}'s hunger went down, but {0} also got sick, significantly impacting health.", userPetName);
                         petStatus[0] -= 2;
                         petStatus[2] -= 3;
-                        if (petStatus[2] > 10)
+                        if (petStatus[2] < 1)
                         {
-                            petStatus[2] = 10;
+                            petStatus[2] = 1;
                         }
                     }
                     else
@@ -199,15 +199,15 @@ class petSim
                     break;
                 case 3:
                     // 5.1 / 5.2 - Special event - refuse to rest if too unhappy
-                    if (petStatus[0] == 10)
+                    if (petStatus[1] == 1)
                     {
                         Console.WriteLine("{0} ran away because of low happiness!", userPetName);
                         Console.WriteLine("{0} came back from their adventure happier, but also got in a fight with a stray, significantly impacting health.", userPetName);
                         petStatus[1] += 2;
                         petStatus[2] -= 3;
-                        if (petStatus[2] > 10)
+                        if (petStatus[2] < 1)
                         {
-                            petStatus[2] = 10;
+                            petStatus[2] = 1;
                         }
                     }
                     else
