@@ -219,6 +219,8 @@ class petSim
                 case 4:
                     // Display pet's status
                     DisplayStatus(petStatus, userPetName);
+                    // Subtract an hour so time does not pass from checking status
+                    currTime = PassTime(currTime, -1);
                     break;
                 case 5:
                     //Exit
